@@ -3,18 +3,22 @@ import { fetchUser } from "./userSlice";
 
 function App() {
   const dispatch = useDispatch();
-  const { data } = useSelector((state) => state.user);
+  const { loading, data, error } = useSelector((state) => state.user);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Redux Thunk API Example</h1>
+      <h1>User Details</h1>
 
       <button 
         onClick={() => dispatch(fetchUser())}
+        disabled={loading}
       >
-        Fetch User
+        {loading ? "Fetching..." : "Fetch User"}
       </button>
 
+      {loading && <p>Loading...</p>}
+
+      {error && <p style={{ color: "red" }}>Error: {error}</p>}
 
       {data && (
         <div style={{ marginTop: "20px" }}>

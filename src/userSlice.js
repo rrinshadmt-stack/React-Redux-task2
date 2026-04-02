@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Async thunk (no error handling)
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async () => {
@@ -11,12 +10,12 @@ export const fetchUser = createAsyncThunk(
   }
 );
 
-// Initial state
 const initialState = {
-  data: null
+  loading: false,
+  data: null,
+  error: null,
 };
 
-// Slice
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -24,9 +23,18 @@ const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
+
       .addCase(fetchUser.fulfilled, (state, action) => {
+        state.loading = false;
         state.data = action.payload;
+      })
+
+      .addCase(fetchUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = "Something went wrong";
       });
   },
 });
